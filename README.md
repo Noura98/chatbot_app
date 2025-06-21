@@ -33,8 +33,7 @@ chatbot_app/
 ├── app.py # Streamlit app interface
 ├── chatbot.py # Core chatbot logic and response generation
 ├── train_chatbot.py # Script to preprocess data and train the NLP model
-├── data
-  ├── intents.json # JSON file with intents, patterns & responses
+├── data/intents.json # JSON file with intents, patterns & responses
 ├── chatbot_model.h5 # Saved trained model (do NOT share sensitive files publicly)
 ├── words.pkl # Vocabulary saved from preprocessing
 ├── classes.pkl # List of classes (intents)
