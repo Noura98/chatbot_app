@@ -29,7 +29,7 @@ You can ask me about:
 
 ## Project Structure
 
-<pre> ```plaintext chatbot_app/ ├── app.py # Streamlit app interface ├── chatbot.py # Core chatbot logic and response generation ├── train_chatbot.py # Script to preprocess data and train the NLP model ├── intents.json # JSON file with intents, patterns & responses ├── chatbot_model.h5 # Saved trained model (do NOT share sensitive files publicly) ├── words.pkl # Vocabulary saved from preprocessing ├── classes.pkl # List of classes (intents) ├── requirements.txt # Project dependencies └── README.md # This file ``` </pre>
+```plaintext chatbot_app/ ├── app.py # Streamlit app interface ├── chatbot.py # Core chatbot logic and response generation ├── train_chatbot.py # Script to preprocess data and train the NLP model ├── intents.json # JSON file with intents, patterns & responses ├── chatbot_model.h5 # Saved trained model (do NOT share sensitive files publicly) ├── words.pkl # Vocabulary saved from preprocessing ├── classes.pkl # List of classes (intents) ├── requirements.txt # Project dependencies └── README.md # This file ```
 ---
 
 ## How to Use
