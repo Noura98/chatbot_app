@@ -55,7 +55,7 @@
       "patterns": ["Tell me a joke", "Make me laugh", "I want a joke"],
       "responses": [
         "Why don't scientists trust atoms? Because they make up everything!",
-        "I told my computer I needed a break, and now it won’t stop sending me vacation ads."
+        "I told my computer I needed a break, and now it won\n’t stop sending me vacation ads."
       ]
     },
     {
