@@ -3,12 +3,13 @@
 
 Welcome! I'm your chatbot assistant.
 You can ask me about:
-
+```
 -Greetings
 -Farewells
 -Help & support
 -Jokes
 -Real-time features such as **current local time** and **live weather information** fetched from a weather API
+```
 ---
 
 ## Features
