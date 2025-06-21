@@ -1,0 +1,80 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": ["Hi", "Hello", "Hey", "Good morning", "Good evening", "What's up?"],
+      "responses": ["Hello!", "Hi there!", "Greetings!", "Hey! How can I help you?"]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["Bye", "See you later", "Goodbye", "Catch you later", "Talk to you soon"],
+      "responses": ["See you!", "Goodbye!", "Take care!", "Until next time!"]
+    },
+    {
+      "tag": "thanks",
+      "patterns": ["Thanks", "Thank you", "I appreciate it", "Thanks a lot"],
+      "responses": ["You're welcome!", "Anytime!", "No problem!", "Glad to help!"]
+    },
+    {
+      "tag": "noanswer",
+      "patterns": [],
+      "responses": ["I'm not sure I understand. Can you rephrase?", "Sorry, I didn't get that."]
+    },
+    {
+      "tag": "name",
+      "patterns": ["What's your name?", "Who are you?", "What should I call you?"],
+      "responses": ["I'm your chatbot assistant.", "You can call me ChatBot!", "I'm a virtual assistant."]
+    },
+    {
+      "tag": "help",
+      "patterns": ["I need help", "Can you help me?", "Support", "Help me please"],
+      "responses": ["Sure! What do you need help with?", "Of course. I'm here to assist you."]
+    },
+    {
+      "tag": "hours",
+      "patterns": ["What are your hours?", "When are you open?", "Are you open today?"],
+      "responses": ["We're open 24/7!", "I’m available any time you need."]
+    },
+    {
+      "tag": "location",
+      "patterns": ["Where are you located?", "Your location?", "Where can I find you?"],
+      "responses": ["I'm available online!", "You can talk to me anywhere on the web."]
+    },
+    {
+      "tag": "weather",
+      "patterns": ["What's the weather like?", "Is it raining?", "Weather today"],
+      "responses": ["I'm not a weather bot, but you can check the forecast online!", "I recommend checking a weather app for accurate info."]
+    },
+    {
+      "tag": "time",
+      "patterns": ["What time is it?", "Current time", "Tell me the time"],
+      "responses": ["I don't have a clock, but you can check your device!", "Your system clock should help."]
+    },
+    {
+      "tag": "joke",
+      "patterns": ["Tell me a joke", "Make me laugh", "I want a joke"],
+      "responses": [
+        "Why don't scientists trust atoms? Because they make up everything!",
+        "I told my computer I needed a break, and now it won’t stop sending me vacation ads."
+      ]
+    },
+    {
+      "tag": "creator",
+      "patterns": ["Who made you?", "Who is your creator?", "Who developed you?"],
+      "responses": ["I was created by a developer just like you!", "A curious mind built me with Python and Keras."]
+    },
+    {
+      "tag": "age",
+      "patterns": ["How old are you?", "What’s your age?"],
+      "responses": ["I’m timeless.", "I exist in the digital world, so age doesn’t apply to me."]
+    },
+    {
+      "tag": "fun_fact",
+      "patterns": ["Tell me a fun fact", "Give me a random fact"],
+      "responses": [
+        "Did you know? Honey never spoils.",
+        "Octopuses have three hearts and blue blood."
+      ]
+    }
+  ]
+}
