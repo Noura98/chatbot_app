@@ -1,104 +1,62 @@
-import random
-import json
-import pickle
-import numpy as np
 import nltk
-from nltk.stem import WordNetLemmatizer
-from tensorflow.keras.models import load_model
+import string
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.corpus import stopwords
+from sentence_transformers import SentenceTransformer,util
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
-lemmatizer = WordNetLemmatizer()
+nltk.download('punkt')
+nltk.download('stopwords')
 
-# Load data
-intents = json.load(open('data/intents.json'))
-words = pickle.load(open('words.pkl', 'rb'))
-classes = pickle.load(open('classes.pkl', 'rb'))
-model = load_model('chatbot_model.h5')
-from datetime import datetime
-import requests
+stop_words = set(stopwords.words('english'))
 
+# 1. Preprocess the text filea
+def preprocess(text_file='data/alice.txt'):
+    with open(text_file, 'r', encoding='utf-8') as f:
+        text = f.read()
 
-def clean_up_sentence(sentence):
-    sentence_words = nltk.word_tokenize(sentence)
-    sentence_words = [lemmatizer.lemmatize(word.lower()) for word in sentence_words]
-    return sentence_words
+    sentences = sent_tokenize(text)
+    cleaned_sentences = []
 
-def bag_of_words(sentence):
-    sentence_words = clean_up_sentence(sentence)
-    bag = [0] * len(words)
-    for w in sentence_words:
-        for i, word in enumerate(words):
-            if word == w:
-                bag[i] = 1
-    return np.array(bag)
+    for sentence in sentences:
+        if ("illustration" in sentence.lower()) or ("chapter" in sentence.lower()):
+            continue
+        words = word_tokenize(sentence.lower())
+        words = [word for word in words if word not in stop_words and word not in string.punctuation]
+        cleaned = ' '.join(words)
+        cleaned_sentences.append(cleaned)
 
-def predict_class(sentence):
-    bow = bag_of_words(sentence)
-    res = model.predict(np.array([bow]))[0]
-    ERROR_THRESHOLD = 0.25
-    results = [[i, r] for i, r in enumerate(res) if r > ERROR_THRESHOLD]
-    results.sort(key=lambda x: x[1], reverse=True)
-    return [{'intent': classes[r[0]], 'probability': str(r[1])} for r in results]
+    return sentences, cleaned_sentences
 
-def get_response(intents_list, intents_json):
-    if len(intents_list) == 0:
-        return "Sorry, I didn't understand that."
-
-    tag = intents_list[0]['intent']
-
-    if tag == "weather":
-        # Optionally, parse city from user input, here default to Tunis
-        return get_weather(city="Tataouine")
-
-    if tag == "time":
-        from datetime import datetime
-        now = datetime.now().strftime("%H:%M:%S")
-        return f"The current time is {now}."
-
-    for intent in intents_json["intents"]:
-        if intent["tag"] == tag:
-            return random.choice(intent["responses"])
+# 2. Find most relevant sentence
+original_sentences, cleaned_sentences = preprocess()
+# Load the sentence transformer model (small and efficient)
+model = SentenceTransformer('all-MiniLM-L6-v2')
 
 
+def get_most_relevant_sentence(user_query):
+    query_embedding = model.encode(user_query, convert_to_tensor=True)
+    sentence_embeddings = model.encode(cleaned_sentences, convert_to_tensor=True)
 
-import requests
+    scores = util.pytorch_cos_sim(query_embedding, sentence_embeddings)[0]
+    best_idx = scores.argmax().item()
+    best_score = scores[best_idx].item()
 
-def get_weather(city="Tunis"):
-    url = "http://api.weatherapi.com/v1/current.json"
-    params = {
-        "key": "ac9aa884a9aa416fbc5141844252804",  # Your WeatherAPI key
-        "q": city
-    }
-    try:
-        response = requests.get(url, params=params)
-        data = response.json()
+    if best_score < 0.4:
+        return "Sorry, I couldn't find a relevant answer."
 
-        if "error" in data:
-            return f"Sorry, I couldn't find weather info for {city}."
+    # Add surrounding context (e.g., 1 before and 1 after if available)
+    context = []
+    if best_idx > 0:
+        context.append(original_sentences[best_idx - 1])
+    context.append(original_sentences[best_idx])
+    if best_idx + 1 < len(original_sentences):
+        context.append(original_sentences[best_idx + 1])
 
-        temp_c = data["current"]["temp_c"]
-        condition = data["current"]["condition"]["text"]
-        emoji = weather_emoji(condition)
+    return " ".join(context)
 
-        return f"The current weather in {city} is {condition} {emoji} with a temperature of {temp_c}°C."
-    except Exception as e:
-        return "Sorry, I couldn't fetch the weather right now."
 
-def weather_emoji(condition):
-    condition = condition.lower()
-    if "sun" in condition or "clear" in condition:
-        return "☀️"
-    elif "rain" in condition or "drizzle" in condition:
-        return "🌧️"
-    elif "thunder" in condition:
-        return "⛈️"
-    elif "snow" in condition:
-        return "❄️"
-    elif "cloud" in condition:
-        return "☁️"
-    else:
-        return "🌈"
-
-def chatbot_response(msg):
-
-    intents_list = predict_class(msg)
-    return get_response(intents_list, intents)
+# 3. Define the chatbot function
+def chatbot(user_input):
+    return get_most_relevant_sentence(user_input)
