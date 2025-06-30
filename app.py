@@ -1,20 +1,30 @@
 import streamlit as st
-from chatbot import chatbot_response
 
-st.title("🤖 Simple Chatbot")
-# 🧠 Show examples of supported questions
-with st.expander("💡 What can you ask me?"):
+from chatbot import chatbot
+
+
+def main():
+    st.title("📘 AI Chatbot on 'Alice in Wonderland'")
+
     st.markdown("""
-    - 👋 Say hello: `Hi`, `Hello`, `Hey`
-    - ❓ Ask for help: `Can you help me?`, `I need support`
-    - 🕓 Ask the time: `What time is it?`
-    - 🌦️ Ask for weather:`What's the weather like?`,`Is it raining?`, ` Weather today`
-    - 📍 Ask location: `Where are you located?`
-    - 😂 Hear a joke: `Tell me a joke`
-    - 👋 Say goodbye: `Bye`, `See you later`
-    """)
-user_input = st.text_input("You:", "")
+    Welcome! This chatbot answers questions by finding the most relevant sentence from *Alice’s Adventures in Wonderland*.
 
-if user_input:
-    response = chatbot_response(user_input)
-    st.text_area("Bot:", value=response, height=100)
+    ### 👉 How to use it:
+    - Ask a question **related to the story**
+    - Example questions:
+        - *Who is Alice chasing?*
+        - *Is there a rabbit?*
+        - *What happens at the tea party?*
+    - The chatbot will reply with the **closest sentence** from the book.
+
+    ---
+    """)
+
+    question = st.text_input("💬 Your question:")
+    if st.button("Submit"):
+        response = chatbot(question)
+        st.text_area("📖 Answer from the book:", value=response, height=120)
+
+
+if __name__ == "__main__":
+    main()
